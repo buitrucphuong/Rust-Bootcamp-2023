@@ -1,3 +1,5 @@
+use std::process::Output;
+
 // Exercise 1
 // Fill in the two impl blocks to make the code work.
 // Make it compile
@@ -10,20 +12,31 @@ trait Hello {
     fn say_something(&self) -> String;
 }
 
-//TODO 
+//TODO
 struct Student {}
 impl Hello for Student {
+    fn say_something(&self) -> String {
+        String::from("I'm a good student")
+    }
 }
 //TODO
 struct Teacher {}
 impl Hello for Teacher {
+    fn say_hi(&self) -> String {
+        String::from("Hi, I'm your new teacher")
+    }
+
+    fn say_something(&self) -> String {
+        String::from("I'm not a bad teacher")
+    }
 }
 
 
 // Exercise 2
 // Make it compile in unit test for exercise 2
-// Hint: use #[derive]  for struct Point 
+// Hint: use #[derive]  for struct Point
 // Run tests
+#[derive(Debug, PartialEq)]
 struct Point {
     x: i32,
     y: i32,
@@ -31,11 +44,11 @@ struct Point {
 
 
 // Exercise 3
-// Make it compile 
+// Make it compile
 // Implement `fn sum` with trait bound in two ways.
 // Run tests
 // Hint: Trait Bound
-fn sum<T>(x: T, y: T) -> T {
+fn sum<T: std::ops::Add<Output = T>>(x: T, y: T) -> T {
     x + y
 }
 
@@ -66,8 +79,8 @@ fn dynamic_dispatch(x) {
     todo!()
 }
 
-// Exercise 5 
-// Fix errors and fill in the blanks 
+// Exercise 5
+// Fix errors and fill in the blanks
 // Run tests
 // Hint: &dyn and Box<dyn>
 trait Draw {
@@ -95,7 +108,7 @@ fn draw_with_ref(x: __) {
 }
 
 // Exercise 6
-// Fix errors and implement 
+// Fix errors and implement
 // Run tests
 // Hint: Associated Type
 
@@ -125,10 +138,10 @@ mod tests {
         let s = Student {};
         assert_eq!(s.say_hi(), "hi");
         assert_eq!(s.say_something(), "I'm a good student");
-    
+
         let t = Teacher {};
         assert_eq!(t.say_hi(), "Hi, I'm your new teacher");
-        assert_eq!(t.say_something(), "I'm not a bad teacher");   
+        assert_eq!(t.say_something(), "I'm not a bad teacher");
     }
 
     #[test]
@@ -150,19 +163,19 @@ mod tests {
     fn exercise4_should_work() {
         let x = 5u8;
         let y = "Hello".to_string();
-    
+
         static_dispatch(x);
-        dynamic_dispatch(&y); 
+        dynamic_dispatch(&y);
     }
 
     #[test]
     fn exercise5_should_work() {
         let x = 1.1f64;
         let y = 8u8;
-    
+
         // Draw x.
         draw_with_box(__);
-    
+
         // Draw y.
         draw_with_ref(&y);
     }
