@@ -31,7 +31,6 @@ impl Hello for Teacher {
     }
 }
 
-
 // Exercise 2
 // Make it compile in unit test for exercise 2
 // Hint: use #[derive]  for struct Point
@@ -42,7 +41,6 @@ struct Point {
     y: i32,
 }
 
-
 // Exercise 3
 // Make it compile
 // Implement `fn sum` with trait bound in two ways.
@@ -51,7 +49,6 @@ struct Point {
 fn sum<T: std::ops::Add<Output = T>>(x: T, y: T) -> T {
     x + y
 }
-
 
 // Exercise 4
 // Fix errors and implement
@@ -62,21 +59,25 @@ trait Foo {
 }
 
 impl Foo for u8 {
-    fn method(&self) -> String { format!("u8: {}", *self) }
+    fn method(&self) -> String {
+        format!("u8: {}", *self)
+    }
 }
 
 impl Foo for String {
-    fn method(&self) -> String { format!("string: {}", *self) }
+    fn method(&self) -> String {
+        format!("string: {}", *self)
+    }
 }
 
 // IMPLEMENT below with generics and parameters
-fn static_dispatch(x) {
-    todo!()
+fn static_dispatch<T: Foo>(x: T) {
+    x.method();
 }
 
 // Implement below with trait objects and parameters
-fn dynamic_dispatch(x) {
-    todo!()
+fn dynamic_dispatch(x: &dyn Foo) {
+    x.method();
 }
 
 // Exercise 5
@@ -103,7 +104,7 @@ fn draw_with_box(x: Box<dyn Draw>) {
     x.draw();
 }
 
-fn draw_with_ref(x: __) {
+fn draw_with_ref(x: &dyn Draw) {
     x.draw();
 }
 
@@ -124,8 +125,21 @@ struct Stack {
 }
 
 //TODO implement Container for Stack
+impl Container for Stack {
+    type Item = u8;
 
+    fn insert(&mut self, item: Self::Item) {
+        self.items.push(item);
+    }
 
+    fn remove(&mut self) -> Option<Self::Item> {
+        self.items.pop()
+    }
+
+    fn is_empty(&self) -> bool {
+        self.items.is_empty()
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -174,15 +188,15 @@ mod tests {
         let y = 8u8;
 
         // Draw x.
-        draw_with_box(__);
+        draw_with_box(Box::new(x));
 
         // Draw y.
         draw_with_ref(&y);
     }
 
     #[test]
-    fn exercise6_should_work(){
-        let mut stack: Stack<u8> = Stack { items: Vec::new() };
+    fn exercise6_should_work() {
+        let mut stack: Stack = Stack { items: Vec::new() };
         assert!(stack.is_empty());
         stack.insert(1);
         stack.insert(2);
@@ -194,5 +208,4 @@ mod tests {
         assert_eq!(stack.remove(), None);
         assert!(stack.is_empty());
     }
-
 }
